@@ -1,0 +1,60 @@
+<template>
+    <div class="search-hero">
+        <!-- Main Search & Sort Bar -->
+        <div class="search-main-row">
+            <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input
+                    type="text"
+                    class="custom-search-input"
+                    placeholder="Search 5G phones, laptops, audio, accessories, fashion..."
+                    value={searchTerm}
+                    oninput={handleSearchChange}
+                />
+                <template if:true={hasSearchTerm}>
+                    <button class="clear-btn" onclick={handleClearSearch} title="Clear search">✕</button>
+                </template>
+            </div>
+
+            <!-- Sort Dropdown -->
+            <div class="sort-wrapper">
+                <span class="sort-label">Sort By:</span>
+                <select class="custom-select" onchange={handleSortChange}>
+                    <option value="featured">Featured & Recommended</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="rating-desc">Highest Customer Rating</option>
+                    <option value="discount-desc">Biggest Discounts</option>
+                </select>
+            </div>
+
+            <!-- In-Stock Filter Toggle -->
+            <div class="toggle-wrapper">
+                <label class="toggle-label">
+                    <input type="checkbox" checked={inStockOnly} onchange={handleInStockToggle} />
+                    <span class="toggle-text">In-Stock Only</span>
+                </label>
+            </div>
+
+            <!-- Reset Button -->
+            <button class="btn-reset" onclick={handleReset} title="Reset all filters">
+                <span>↺</span> Reset
+            </button>
+        </div>
+
+        <!-- Interactive Category Quick Pills -->
+        <div class="category-pills-scroll">
+            <template for:each={categoryPills} for:item="pill">
+                <button
+                    key={pill.id}
+                    class={pill.cssClass}
+                    onclick={handlePillClick}
+                    data-id={pill.id}
+                >
+                    <span class="pill-emoji">{pill.emoji}</span>
+                    <span class="pill-name">{pill.name}</span>
+                </button>
+            </template>
+        </div>
+    </div>
+</template>

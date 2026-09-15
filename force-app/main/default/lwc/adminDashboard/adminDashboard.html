@@ -1,0 +1,179 @@
+<template>
+    <div class="slds-box slds-theme_default admin-dash">
+        <!-- Header & Action Bar -->
+        <div class="slds-grid slds-grid_vertical-align-center slds-wrap slds-m-bottom_large header-container">
+            <div class="slds-grid slds-grid_vertical-align-center slds-col slds-size_1-1 slds-medium-size_8-12">
+                <div class="icon-bubble slds-m-right_small">
+                    <lightning-icon icon-name="standard:dashboard" size="medium" variant="inverse"></lightning-icon>
+                </div>
+                <div>
+                    <h1 class="slds-text-heading_large font-bold">Executive E-Commerce Operations Hub</h1>
+                    <p class="slds-text-color_weak">Real-time enterprise KPI metrics, stock telemetry & one-click warehouse replenishment</p>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-1 slds-medium-size_4-12 slds-text-align_right slds-m-top_small-only">
+                <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh Metrics" title="Refresh Metrics" onclick={handleRefreshAll} class="slds-m-right_x-small"></lightning-button-icon>
+                <lightning-badge label="🟢 Live Telemetry Connected" class="pulse-badge"></lightning-badge>
+            </div>
+        </div>
+
+        <!-- KPI Metric Cards Grid -->
+        <div class="slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_1-1 slds-small-size_1-2 slds-medium-size_3-12 slds-m-bottom_medium">
+                <div class="kpi-card bg-gradient-blue">
+                    <div class="kpi-top">
+                        <span class="kpi-label">TOTAL REVENUE</span>
+                        <span class="kpi-icon">💰</span>
+                    </div>
+                    <h2 class="kpi-val">₹{kpis.totalRevenue}</h2>
+                    <span class="kpi-subtext">Settled & Verified Payments</span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-1 slds-small-size_1-2 slds-medium-size_3-12 slds-m-bottom_medium">
+                <div class="kpi-card bg-gradient-purple">
+                    <div class="kpi-top">
+                        <span class="kpi-label">TOTAL ORDERS</span>
+                        <span class="kpi-icon">📦</span>
+                    </div>
+                    <h2 class="kpi-val">{kpis.totalOrders}</h2>
+                    <span class="kpi-subtext">{kpis.deliveredOrders} Successfully Delivered</span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-1 slds-small-size_1-2 slds-medium-size_3-12 slds-m-bottom_medium">
+                <div class="kpi-card bg-gradient-emerald">
+                    <div class="kpi-top">
+                        <span class="kpi-label">CUSTOMER BASE</span>
+                        <span class="kpi-icon">👥</span>
+                    </div>
+                    <h2 class="kpi-val">{kpis.totalCustomers}</h2>
+                    <span class="kpi-subtext">{kpis.vipCustomers} VIP High-Value Patrons</span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-1 slds-small-size_1-2 slds-medium-size_3-12 slds-m-bottom_medium">
+                <div class="kpi-card bg-gradient-amber">
+                    <div class="kpi-top">
+                        <span class="kpi-label">PENDING FULFILLMENT</span>
+                        <span class="kpi-icon">⚡</span>
+                    </div>
+                    <h2 class="kpi-val">{kpis.pendingOrders}</h2>
+                    <span class="kpi-subtext">Orders in Pipeline</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secondary Operational Telemetry -->
+        <div class="slds-grid slds-wrap slds-gutters slds-m-top_small">
+            <div class="slds-col slds-size_1-1 slds-medium-size_4-12 slds-m-bottom_medium">
+                <div class="kpi-card sub-card">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                        <span class="kpi-label">LOW STOCK ALERTS</span>
+                        <span class="status-indicator red"></span>
+                    </div>
+                    <h3 class="kpi-val-sub text-danger">{kpis.lowStockProducts} SKUs Critical</h3>
+                    <p class="sub-desc">Inventory below safety replenishment threshold</p>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-1 slds-medium-size_4-12 slds-m-bottom_medium">
+                <div class="kpi-card sub-card">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                        <span class="kpi-label">RETURN REQUESTS</span>
+                        <span class="status-indicator amber"></span>
+                    </div>
+                    <h3 class="kpi-val-sub text-warning">{kpis.returnRequests} Pending Review</h3>
+                    <p class="sub-desc">Customer reverse logistics items requiring audit</p>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-1 slds-medium-size_4-12 slds-m-bottom_medium">
+                <div class="kpi-card sub-card">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                        <span class="kpi-label">VIP PATRON TIER</span>
+                        <span class="status-indicator green"></span>
+                    </div>
+                    <h3 class="kpi-val-sub text-success">{kpis.vipCustomers} High-LTV Accounts</h3>
+                    <p class="sub-desc">Tier-1 customers with loyalty reward priority</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warehouse Inventory Restock Desk -->
+        <div class="restock-section slds-m-top_large">
+            <div class="slds-card section-card">
+                <div class="slds-card__header slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                    <div class="slds-grid slds-grid_vertical-align-center">
+                        <span class="section-icon slds-m-right_small">📦</span>
+                        <div>
+                            <h2 class="section-title">Automated Warehouse Replenishment Desk</h2>
+                            <p class="section-subtitle">Real-time low stock SKU monitoring with 1-click backend inventory injection & audit ledger logging</p>
+                        </div>
+                    </div>
+                    <div>
+                        <lightning-button label="Refresh Inventory" icon-name="utility:refresh" onclick={handleRefreshAll} variant="neutral" size="small"></lightning-button>
+                    </div>
+                </div>
+
+                <div class="slds-card__body slds-card__body_inner">
+                    <template if:true={isRestocking}>
+                        <div class="slds-p-around_medium slds-text-align_center">
+                            <lightning-spinner alternative-text="Updating Inventory in Salesforce..." size="small"></lightning-spinner>
+                            <span class="slds-m-left_small text-muted">Updating inventory record & logging transaction in Salesforce...</span>
+                        </div>
+                    </template>
+
+                    <template if:true={hasLowStockProducts}>
+                        <div class="table-responsive">
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>SKU / Product Name</th>
+                                        <th>Category</th>
+                                        <th>Brand</th>
+                                        <th>Price</th>
+                                        <th>Available Stock</th>
+                                        <th>Stock Health</th>
+                                        <th class="slds-text-align_right">Quick Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={lowStockList} for:item="item">
+                                        <tr key={item.Id}>
+                                            <td class="font-semibold text-dark">
+                                                <div class="prod-cell">
+                                                    <span class="sku-code">{item.Product_Code__c}</span>
+                                                    <span class="prod-name">{item.Name}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="category-pill">{item.categoryName}</span>
+                                            </td>
+                                            <td>{item.Brand__c}</td>
+                                            <td>₹{item.formattedPrice}</td>
+                                            <td>
+                                                <span class={item.stockNumberClass}>{item.Available_Quantity__c} units</span>
+                                            </td>
+                                            <td>
+                                                <span class={item.healthBadgeClass}>{item.Stock_Status__c}</span>
+                                            </td>
+                                            <td class="slds-text-align_right">
+                                                <button class="btn-restock" data-id={item.Id} data-name={item.Name} onclick={handleRestockClick}>
+                                                    ⚡ Restock +25 Units
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+
+                    <template if:false={hasLowStockProducts}>
+                        <div class="empty-stock-state">
+                            <div class="check-icon">✅</div>
+                            <h3>All Inventory Levels Healthy!</h3>
+                            <p>No products are currently under the reorder threshold (25 units). The supply chain is fully stocked.</p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

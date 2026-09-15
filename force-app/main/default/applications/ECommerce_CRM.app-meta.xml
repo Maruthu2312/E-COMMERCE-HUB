@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <description>Advanced E-Commerce Customer Management and Sales Automation CRM</description>
+    <formFactors>Large</formFactors>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <label>E-Commerce CRM</label>
+    <navType>Standard</navType>
+    <tabs>ECommerce_Hub</tabs>
+    <tabs>Customer__c</tabs>
+    <tabs>Order__c</tabs>
+    <tabs>Product__c</tabs>
+    <tabs>Category__c</tabs>
+    <tabs>Payment__c</tabs>
+    <tabs>Shipment__c</tabs>
+    <tabs>Return__c</tabs>
+    <tabs>Refund__c</tabs>
+    <tabs>Coupon__c</tabs>
+    <tabs>Inventory_Transaction__c</tabs>
+    <tabs>Loyalty_Transaction__c</tabs>
+    <tabs>standard-Case</tabs>
+    <tabs>standard-report</tabs>
+    <tabs>standard-Dashboard</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>ECommerce_CRM_UtilityBar</utilityBar>
+</CustomApplication>

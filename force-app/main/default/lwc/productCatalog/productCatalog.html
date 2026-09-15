@@ -1,0 +1,70 @@
+<template>
+    <div class="catalog-container">
+        <!-- Festive Promo Banner -->
+        <div class="festive-banner">
+            <div class="banner-content">
+                <span class="banner-badge">🔥 FESTIVE MEGA SALE</span>
+                <h2 class="banner-title">Exclusive Deals on Top Brands with Instant Checkout</h2>
+                <p class="banner-sub">Use coupon code <span class="coupon-pill">FLAT500</span> for flat ₹500 off or <span class="coupon-pill">DIWALI20</span> for 20% savings!</p>
+            </div>
+            <div class="banner-perks">
+                <div class="perk-badge">🚚 Free Delivery ₹499+</div>
+                <div class="perk-badge">🛡️ 1-Yr Brand Warranty</div>
+                <div class="perk-badge">🔄 15-Day Free Returns</div>
+            </div>
+        </div>
+
+        <!-- Search & Filter Bar -->
+        <c-product-search onfilterchange={handleFilterChange}></c-product-search>
+
+        <!-- Catalog Status Bar -->
+        <div class="catalog-status-bar">
+            <span class="count-text">Showing <strong>{processedProducts.length}</strong> products</span>
+            <template if:true={inStockOnly}>
+                <span class="active-filter-tag">In-Stock Only</span>
+            </template>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="spinner-wrapper">
+                <lightning-spinner alternative-text="Loading Products" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Product Grid -->
+        <template if:false={isLoading}>
+            <div class="slds-grid slds-wrap slds-gutters_medium">
+                <template for:each={processedProducts} for:item="prod">
+                    <div key={prod.Id} class="slds-col slds-size_1-1 slds-small-size_6-12 slds-medium-size_4-12 slds-large-size_3-12 slds-m-bottom_large">
+                        <c-product-card
+                            product={prod}
+                            is-wishlisted={prod.isWishlisted}
+                            onaddtocart={handleAddToCart}
+                            onviewdetails={handleViewDetails}
+                            ontogglewishlist={handleToggleWishlist}
+                        ></c-product-card>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Empty State -->
+            <template if:true={isProductsEmpty}>
+                <div class="empty-state-box">
+                    <span class="empty-icon">🔍</span>
+                    <h3 class="empty-title">No matching products found</h3>
+                    <p class="empty-desc">Try clearing filters, searching for a different brand, or toggling off the in-stock filter.</p>
+                </div>
+            </template>
+        </template>
+
+        <!-- Product Details Modal -->
+        <template if:true={selectedProductId}>
+            <c-product-details
+                product-id={selectedProductId}
+                onclose={handleCloseDetails}
+                onaddtocart={handleAddToCart}
+            ></c-product-details>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VR_Discount_Between_0_And_100</fullName>
+    <active>true</active>
+    <description>VR_Discount_Between_0_And_100</description>
+    <errorConditionFormula>Discount_Percentage__c &lt; 0 || Discount_Percentage__c &gt; 100</errorConditionFormula>
+    <errorDisplayField>Discount_Percentage__c</errorDisplayField>
+    <errorMessage>Discount percentage must be between 0 and 100.</errorMessage>
+</ValidationRule>

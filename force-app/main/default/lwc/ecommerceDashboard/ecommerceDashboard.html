@@ -1,0 +1,366 @@
+<template>
+    <div class="ecommerce-app">
+        <!-- Toast Notification Banner -->
+        <template if:true={toast.visible}>
+            <div class={toastContainerClass}>
+                <div class="toast-content">
+                    <span class="toast-icon">{toast.icon}</span>
+                    <div class="toast-text">
+                        <strong class="toast-title">{toast.title}</strong>
+                        <p class="toast-message">{toast.message}</p>
+                    </div>
+                    <button class="toast-close-btn" onclick={closeToast}>✕</button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Top Navigation Bar -->
+        <header class="app-header slds-grid slds-grid_vertical-align-center slds-p-around_medium">
+            <div class="slds-grid slds-grid_vertical-align-center logo-area">
+                <div class="brand-logo-icon slds-m-right_small">
+                    <lightning-icon icon-name="standard:store" size="medium" variant="inverse"></lightning-icon>
+                </div>
+                <div>
+                    <div class="slds-grid slds-grid_vertical-align-center">
+                        <h1 class="brand-heading">BharatMart</h1>
+                        <span class="brand-edition-pill">PRO CRM</span>
+                    </div>
+                    <span class="sub-text">Enterprise Omni-Channel Commerce & Order Automation Engine</span>
+                </div>
+            </div>
+
+            <!-- Main Navigation Links -->
+            <div class="slds-col_bump-left nav-actions slds-grid slds-grid_vertical-align-center">
+                <div class="nav-pill-group">
+                    <button class={storefrontBtnClass} onclick={navStorefront}>
+                        <span class="btn-icon">🛍️</span>
+                        <span>Storefront</span>
+                    </button>
+                    <button class={wishlistBtnClass} onclick={navWishlist}>
+                        <span class="btn-icon">❤️</span>
+                        <span>Wishlist</span>
+                        <template if:true={wishlistCount}>
+                            <span class="badge-count wishlist-badge">{wishlistCount}</span>
+                        </template>
+                    </button>
+                    <button class={ordersBtnClass} onclick={navOrders}>
+                        <span class="btn-icon">📦</span>
+                        <span>Track Orders</span>
+                        <template if:true={ordersCount}>
+                            <span class="badge-count orders-badge">{ordersCount}</span>
+                        </template>
+                    </button>
+                    <button class={cartBtnClass} onclick={navCart}>
+                        <span class="btn-icon">🛒</span>
+                        <span>Cart</span>
+                        <template if:true={cartTotalQty}>
+                            <span class="badge-count cart-badge">{cartTotalQty}</span>
+                        </template>
+                    </button>
+                    <button class={adminBtnClass} onclick={navAdmin}>
+                        <span class="btn-icon">📊</span>
+                        <span>Operations Hub</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- View Content Router -->
+        <main class="slds-p-around_medium">
+            <!-- 1. STOREFRONT VIEW -->
+            <template if:true={isStorefrontView}>
+                <c-product-catalog 
+                    wishlisted-ids={wishlistProductIds}
+                    onaddtocart={handleAddToCart}
+                    ontogglewishlist={handleWishlistToggle}
+                ></c-product-catalog>
+            </template>
+
+            <!-- 2. WISHLIST VIEW -->
+            <template if:true={isWishlistView}>
+                <div class="view-container">
+                    <div class="view-header slds-m-bottom_medium slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                        <div>
+                            <h2 class="view-title">❤️ My Saved Wishlist ({wishlistCount} items)</h2>
+                            <p class="view-subtitle">Items you have pinned for future purchase with live stock telemetry</p>
+                        </div>
+                        <lightning-button label="Continue Shopping" icon-name="utility:shop" onclick={navStorefront} variant="brand"></lightning-button>
+                    </div>
+
+                    <template if:true={isWishlistLoading}>
+                        <div class="slds-p-around_large slds-text-align_center">
+                            <lightning-spinner alternative-text="Loading wishlist items..." size="medium"></lightning-spinner>
+                        </div>
+                    </template>
+
+                    <template if:false={isWishlistLoading}>
+                        <template if:true={hasWishlistItems}>
+                            <div class="wishlist-grid">
+                                <template for:each={wishlistItems} for:item="item">
+                                    <div key={item.Id} class="wishlist-card">
+                                        <div class="wishlist-media">
+                                            <template if:true={item.Product__r.Product_Image_URL__c}>
+                                                <img src={item.Product__r.Product_Image_URL__c} alt={item.Product__r.Name} class="wishlist-img" />
+                                            </template>
+                                            <template if:false={item.Product__r.Product_Image_URL__c}>
+                                                <div class="wishlist-img-fallback">🛍️</div>
+                                            </template>
+                                            <button class="remove-wishlist-btn" title="Remove from Wishlist" data-id={item.Product__c} onclick={handleRemoveFromWishlist}>✕</button>
+                                        </div>
+                                        <div class="wishlist-body">
+                                            <div class="wishlist-meta">
+                                                <span class="wishlist-category">{item.categoryName}</span>
+                                                <span class="wishlist-rating">★ {item.formattedRating}</span>
+                                            </div>
+                                            <h3 class="wishlist-product-name">{item.Product__r.Name}</h3>
+                                            <div class="wishlist-pricing">
+                                                <span class="wishlist-price">₹{item.formattedPrice}</span>
+                                                <span class={item.stockClass}>{item.Product__r.Stock_Status__c}</span>
+                                            </div>
+                                            <div class="wishlist-actions slds-m-top_small">
+                                                <button class="btn-wishlist-cart" data-id={item.Product__c} onclick={handleMoveWishlistToCart}>
+                                                    🛒 Move to Cart
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:false={hasWishlistItems}>
+                            <div class="empty-state-card slds-text-align_center slds-p-around_xx-large">
+                                <div class="empty-icon">🤍</div>
+                                <h3 class="empty-title">Your Wishlist is Empty</h3>
+                                <p class="empty-text">Explore our collection and click the heart icon on any product to save it here for later!</p>
+                                <lightning-button label="Explore Catalog" variant="brand" icon-name="utility:shop" onclick={navStorefront} class="slds-m-top_medium"></lightning-button>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </template>
+
+            <!-- 3. LIVE ORDER TRACKING & RETURNS VIEW -->
+            <template if:true={isOrdersView}>
+                <div class="view-container">
+                    <div class="view-header slds-m-bottom_medium slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                        <div>
+                            <h2 class="view-title">📦 Live Order Tracking & Reverse Logistics</h2>
+                            <p class="view-subtitle">Real-time order lifecycle, courier telemetry, and automated self-service returns</p>
+                        </div>
+                        <div>
+                            <lightning-button label="Refresh Orders" icon-name="utility:refresh" onclick={refreshOrders} variant="neutral" class="slds-m-right_x-small"></lightning-button>
+                            <lightning-button label="Shop More" icon-name="utility:shop" onclick={navStorefront} variant="brand"></lightning-button>
+                        </div>
+                    </div>
+
+                    <!-- Filter / Search Controls -->
+                    <div class="orders-filter-bar slds-m-bottom_medium slds-grid slds-grid_vertical-align-center slds-wrap">
+                        <div class="slds-col slds-size_1-1 slds-medium-size_6-12 slds-m-bottom_small-only">
+                            <lightning-input 
+                                type="search" 
+                                placeholder="Search by Order #, Customer Name, or City..." 
+                                value={orderSearchTerm} 
+                                onchange={handleOrderSearchChange} 
+                                variant="label-hidden"
+                            ></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-1 slds-medium-size_6-12 slds-text-align_right">
+                            <div class="filter-pills">
+                                <button class={filterAllClass} data-filter="all" onclick={handleOrderStatusFilter}>All ({ordersCount})</button>
+                                <button class={filterPendingClass} data-filter="pending" onclick={handleOrderStatusFilter}>In Transit / Processing</button>
+                                <button class={filterDeliveredClass} data-filter="delivered" onclick={handleOrderStatusFilter}>Delivered</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <template if:true={isOrdersLoading}>
+                        <div class="slds-p-around_large slds-text-align_center">
+                            <lightning-spinner alternative-text="Loading order tracking..." size="medium"></lightning-spinner>
+                        </div>
+                    </template>
+
+                    <template if:false={isOrdersLoading}>
+                        <template if:true={hasOrders}>
+                            <div class="orders-list">
+                                <template for:each={filteredOrders} for:item="ord">
+                                    <div key={ord.Id} class="order-card">
+                                        <!-- Order Top Bar -->
+                                        <div class="order-card-header slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-wrap">
+                                            <div class="order-info-left">
+                                                <span class="order-number">{ord.Name}</span>
+                                                <span class="order-customer-tag">👤 {ord.customerName} ({ord.customerCity})</span>
+                                                <span class="order-date">📅 {ord.formattedDate}</span>
+                                            </div>
+                                            <div class="order-info-right slds-grid slds-grid_vertical-align-center">
+                                                <span class="order-total">₹{ord.formattedTotal}</span>
+                                                <span class={ord.statusBadgeClass}>{ord.Order_Status__c}</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Delivery Progress Stepper -->
+                                        <div class="order-stepper-container">
+                                            <div class="order-stepper">
+                                                <div class={ord.step1Class}>
+                                                    <div class="step-dot">1</div>
+                                                    <span class="step-label">Placed</span>
+                                                </div>
+                                                <div class={ord.line1Class}></div>
+                                                <div class={ord.step2Class}>
+                                                    <div class="step-dot">2</div>
+                                                    <span class="step-label">Confirmed</span>
+                                                </div>
+                                                <div class={ord.line2Class}></div>
+                                                <div class={ord.step3Class}>
+                                                    <div class="step-dot">3</div>
+                                                    <span class="step-label">Shipped</span>
+                                                </div>
+                                                <div class={ord.line3Class}></div>
+                                                <div class={ord.step4Class}>
+                                                    <div class="step-dot">4</div>
+                                                    <span class="step-label">Delivered</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Courier / Shipping Telemetry -->
+                                        <template if:true={ord.hasShipment}>
+                                            <div class="shipment-telemetry-banner">
+                                                <span class="telemetry-icon">🚚</span>
+                                                <span class="telemetry-text">
+                                                    Courier: <strong>{ord.courierName}</strong> | Tracking ID: <span class="tracking-code">{ord.trackingNumber}</span> | Expected: <strong>{ord.expectedDelivery}</strong>
+                                                </span>
+                                            </div>
+                                        </template>
+
+                                        <!-- Order Items Preview -->
+                                        <div class="order-items-section">
+                                            <h4 class="items-heading">Ordered Items ({ord.itemCount}):</h4>
+                                            <div class="order-items-grid">
+                                                <template for:each={ord.items} for:item="it">
+                                                    <div key={it.Id} class="order-item-pill">
+                                                        <template if:true={it.Product__r.Product_Image_URL__c}>
+                                                            <img src={it.Product__r.Product_Image_URL__c} alt={it.Product__r.Name} class="item-pill-img" />
+                                                        </template>
+                                                        <template if:false={it.Product__r.Product_Image_URL__c}>
+                                                            <div class="item-pill-fallback">🛍️</div>
+                                                        </template>
+                                                        <div class="item-pill-details">
+                                                            <span class="item-pill-name">{it.Product__r.Name}</span>
+                                                            <span class="item-pill-qty">Qty: {it.Quantity__c} × ₹{it.formattedPrice}</span>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+
+                                        <!-- Footer Actions (e.g. Return button) -->
+                                        <div class="order-card-footer slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                                            <div class="address-snippet">
+                                                <span class="addr-label">📍 Destination:</span> {ord.Shipping_Address__c}
+                                            </div>
+                                            <div class="footer-actions">
+                                                <template if:true={ord.isEligibleForReturn}>
+                                                    <button class="btn-return-action" data-id={ord.Id} data-name={ord.Name} onclick={handleOpenReturnModal}>
+                                                        ↩️ Request Return / Refund
+                                                    </button>
+                                                </template>
+                                                <template if:false={ord.isEligibleForReturn}>
+                                                    <template if:true={ord.isDelivered}>
+                                                        <span class="return-status-tag">Return Window Closed</span>
+                                                    </template>
+                                                    <template if:false={ord.isDelivered}>
+                                                        <span class="return-status-tag">In Transit to Destination</span>
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:false={hasOrders}>
+                            <div class="empty-state-card slds-text-align_center slds-p-around_xx-large">
+                                <div class="empty-icon">📦</div>
+                                <h3 class="empty-title">No Orders Found</h3>
+                                <p class="empty-text">You haven't placed any orders matching this criteria yet.</p>
+                                <lightning-button label="Start Shopping" variant="brand" icon-name="utility:shop" onclick={navStorefront} class="slds-m-top_medium"></lightning-button>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </template>
+
+            <!-- 4. CART VIEW -->
+            <template if:true={isCartView}>
+                <c-shopping-cart
+                    items={cartItems}
+                    onupdateqty={handleUpdateQty}
+                    onremoveitem={handleRemoveItem}
+                    onstartcheckout={handleStartCheckout}
+                ></c-shopping-cart>
+            </template>
+
+            <!-- 5. CHECKOUT VIEW -->
+            <template if:true={isCheckoutView}>
+                <c-checkout-page
+                    items={cartItems}
+                    checkout-data={checkoutData}
+                    oncheckoutcomplete={handleCheckoutComplete}
+                ></c-checkout-page>
+            </template>
+
+            <!-- 6. OPERATIONS HUB / ADMIN DASHBOARD -->
+            <template if:true={isAdminView}>
+                <c-admin-dashboard></c-admin-dashboard>
+            </template>
+        </main>
+
+        <!-- RETURN REQUEST MODAL -->
+        <template if:true={showReturnModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header modal-head">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseReturnModal}>
+                            ✕
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-bold text-white">↩️ Request Return & Refund</h2>
+                        <p class="slds-m-top_x-small text-white-muted">Order: <strong>{activeReturnOrder.Name}</strong></p>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-m-bottom_medium">
+                            <lightning-combobox
+                                name="returnReason"
+                                label="Reason for Return"
+                                value={returnReason}
+                                placeholder="Select a reason..."
+                                options={returnReasonOptions}
+                                onchange={handleReturnReasonChange}
+                                required
+                            ></lightning-combobox>
+                        </div>
+                        <div class="slds-m-bottom_medium">
+                            <lightning-textarea
+                                name="returnComment"
+                                label="Additional Comments / Specific Issue"
+                                placeholder="Describe the reason for return (e.g. damaged during shipping, wrong size)..."
+                                value={returnComments}
+                                onchange={handleReturnCommentsChange}
+                            ></lightning-textarea>
+                        </div>
+                        <div class="return-info-alert">
+                            <span>ℹ️ Once submitted, a courier pickup will be scheduled within 24 hours, and your refund of ₹{activeReturnOrder.Grand_Total__c} will be initiated.</span>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" variant="neutral" onclick={handleCloseReturnModal} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button label="Submit Return Request" variant="brand" onclick={handleSubmitReturn} disabled={isSubmittingReturn}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>
+

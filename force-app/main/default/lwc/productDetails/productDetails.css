@@ -1,0 +1,312 @@
+.custom-modal {
+    max-width: 860px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    padding: 1.5rem;
+    text-align: left;
+    position: relative;
+    border-bottom: 1px solid #334155;
+}
+
+.header-badges {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.brand-badge {
+    background: rgba(59, 130, 246, 0.25);
+    color: #93c5fd;
+    border: 1px solid rgba(147, 197, 253, 0.3);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.category-badge {
+    background: rgba(255, 255, 255, 0.15);
+    color: #e2e8f0;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.modal-body {
+    padding: 2rem;
+    background: #ffffff;
+}
+
+.spinner-container {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Image / Visual Area */
+.detail-image-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.5rem;
+    height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.modal-product-img {
+    max-height: 280px;
+    max-width: 90%;
+    object-fit: contain;
+}
+
+.detail-fallback-box {
+    text-align: center;
+    padding: 1rem;
+}
+
+.fallback-big-icon {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.fallback-brand-big {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1e293b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.fallback-model {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.modal-stock-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+}
+
+.badge-green { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.badge-orange { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.badge-red { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+/* Ratings */
+.rating-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+}
+
+.stars { color: #f59e0b; font-size: 16px; }
+.rating-val { font-size: 13px; font-weight: 700; color: #334155; }
+.verified-tag { font-size: 12px; color: #16a34a; font-weight: 600; }
+
+/* Pricing */
+.price-highlight {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 0.25rem;
+}
+
+.modal-final-price {
+    font-size: 28px;
+    font-weight: 900;
+    color: #0f172a;
+}
+
+.modal-orig-price {
+    text-decoration: line-through;
+    color: #94a3b8;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.save-tag {
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.gst-subtext {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #e2e8f0;
+    margin: 1.25rem 0;
+}
+
+/* Description */
+.section-heading {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #475569;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.desc-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #334155;
+    margin-bottom: 1.25rem;
+}
+
+/* Specs Grid */
+.specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.spec-item {
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.spec-label {
+    font-size: 10.5px;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.spec-value {
+    font-size: 13px;
+    color: #0f172a;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+/* Quantity & Action Dock */
+.action-dock {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-top: 0.5rem;
+}
+
+.qty-stepper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+}
+
+.qty-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #475569;
+    margin-right: 4px;
+}
+
+.step-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.step-btn:hover:not(:disabled) {
+    background: #e2e8f0;
+}
+
+.step-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.qty-number {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 15px;
+    color: #0f172a;
+}
+
+.btn-modal-cart {
+    flex-grow: 1;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border: none;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    transition: all 0.2s ease;
+}
+
+.btn-modal-cart:hover:not(.disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.45);
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+}
+
+.btn-modal-cart.disabled {
+    background: #cbd5e1;
+    color: #64748b;
+    box-shadow: none;
+    cursor: not-allowed;
+}

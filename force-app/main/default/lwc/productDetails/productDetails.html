@@ -1,0 +1,114 @@
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+        <div class="slds-modal__container custom-modal">
+            <header class="slds-modal__header modal-header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleClose}>
+                    <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                </button>
+                <div class="header-badges">
+                    <span class="brand-badge">{product.Brand__c}</span>
+                    <span class="category-badge">{productCategoryName}</span>
+                </div>
+                <h2 class="modal-title">{product.Name}</h2>
+            </header>
+
+            <div class="slds-modal__content modal-body">
+                <template if:true={isLoading}>
+                    <div class="spinner-container">
+                        <lightning-spinner alternative-text="Loading product details" size="medium"></lightning-spinner>
+                    </div>
+                </template>
+
+                <template if:false={isLoading}>
+                    <div class="slds-grid slds-wrap slds-gutters_large">
+                        <!-- Left: Product Image / Visual Showcase -->
+                        <div class="slds-col slds-size_1-1 slds-medium-size_5-12">
+                            <div class="detail-image-box">
+                                <template if:true={showImage}>
+                                    <img
+                                        src={product.Product_Image_URL__c}
+                                        alt={product.Name}
+                                        class="modal-product-img"
+                                        onerror={handleImageError}
+                                    />
+                                </template>
+                                <template if:false={showImage}>
+                                    <div class="detail-fallback-box">
+                                        <span class="fallback-big-icon">{categoryEmoji}</span>
+                                        <h4 class="fallback-brand-big">{product.Brand__c}</h4>
+                                        <p class="fallback-model">{product.Name}</p>
+                                    </div>
+                                </template>
+                                <span class={stockBadgeClass}>{product.Stock_Status__c}</span>
+                            </div>
+                        </div>
+
+                        <!-- Right: Info & Pricing -->
+                        <div class="slds-col slds-size_1-1 slds-medium-size_7-12">
+                            <!-- Ratings -->
+                            <div class="rating-strip">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-val">{formattedRating} / 5.0</span>
+                                <span class="verified-tag">✓ Verified Authenticity</span>
+                            </div>
+
+                            <!-- Pricing -->
+                            <div class="price-highlight">
+                                <span class="modal-final-price">₹{formattedFinalPrice}</span>
+                                <template if:true={hasDiscount}>
+                                    <span class="modal-orig-price">₹{formattedOriginalPrice}</span>
+                                    <span class="save-tag">SAVE {product.Discount_Percentage__c}%</span>
+                                </template>
+                            </div>
+                            <div class="gst-subtext">Inclusive of all applicable Indian taxes (18% GST). Free shipping on orders over ₹499.</div>
+
+                            <hr class="divider" />
+
+                            <!-- Product Description -->
+                            <div class="desc-section">
+                                <h4 class="section-heading">Overview</h4>
+                                <p class="desc-text">{product.Description__c}</p>
+                            </div>
+
+                            <!-- SKU & Availability -->
+                            <div class="specs-grid">
+                                <div class="spec-item">
+                                    <span class="spec-label">SKU Code</span>
+                                    <span class="spec-value">{product.Product_Code__c}</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Available Units</span>
+                                    <span class="spec-value">{product.Available_Quantity__c} in stock</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Warranty</span>
+                                    <span class="spec-value">1 Year Brand Warranty</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Return Policy</span>
+                                    <span class="spec-value">15 Days Hassle-Free</span>
+                                </div>
+                            </div>
+
+                            <!-- Quantity & Action Buttons -->
+                            <div class="action-dock">
+                                <div class="qty-stepper">
+                                    <span class="qty-label">Quantity:</span>
+                                    <button class="step-btn" onclick={decrementQty} disabled={isMinQty}>-</button>
+                                    <span class="qty-number">{quantity}</span>
+                                    <button class="step-btn" onclick={incrementQty} disabled={isMaxQty}>+</button>
+                                </div>
+
+                                <button class={addToCartBtnClass} onclick={handleAddToCart} disabled={isOutOfStock}>
+                                    <span class="cart-icon">🛒</span>
+                                    <span>{addToCartLabel}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

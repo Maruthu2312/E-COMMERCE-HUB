@@ -1,0 +1,22 @@
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Category_Status__c</fullName>
+    <externalId>false</externalId>
+    <label>Category Status</label>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Active</fullName>
+                <default>true</default>
+                <label>Active</label>
+            </value>
+            <value>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+                <label>Inactive</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

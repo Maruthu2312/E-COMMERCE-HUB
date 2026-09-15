@@ -1,0 +1,9 @@
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tax_Percentage__c</fullName>
+    <defaultValue>18</defaultValue>
+    <externalId>false</externalId>
+    <label>Tax Percentage</label>
+    <precision>5</precision>
+    <scale>2</scale>
+    <type>Percent</type>
+</CustomField>

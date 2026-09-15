@@ -1,0 +1,7 @@
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Segment__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(Total_Spending__c &gt;= 100000, "VIP Tier", IF(Total_Spending__c &gt;= 50000, "Platinum Tier", IF(Total_Spending__c &gt;= 25000, "Gold Tier", IF(Total_Spending__c &gt;= 10000, "Silver Tier", "Regular Tier"))))</formula>
+    <label>Customer Segment</label>
+    <type>Text</type>
+</CustomField>

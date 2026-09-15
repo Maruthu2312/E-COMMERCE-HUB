@@ -1,0 +1,7 @@
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Registration_Date__c</fullName>
+    <externalId>false</externalId>
+    <label>Registration Date</label>
+    <required>false</required>
+    <type>Date</type>
+</CustomField>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VR_Prevent_Zero_Unit_Price</fullName>
+    <active>true</active>
+    <description>VR_Prevent_Zero_Unit_Price</description>
+    <errorConditionFormula>Unit_Price__c &lt;= 0</errorConditionFormula>
+    <errorDisplayField>Unit_Price__c</errorDisplayField>
+    <errorMessage>Order item unit price must be greater than zero.</errorMessage>
+</ValidationRule>

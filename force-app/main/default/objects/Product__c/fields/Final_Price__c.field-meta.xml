@@ -1,0 +1,9 @@
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Final_Price__c</fullName>
+    <externalId>false</externalId>
+    <formula>ROUND(Price__c * (1 - (Discount_Percentage__c / 100)), 2)</formula>
+    <label>Final Price</label>
+    <precision>18</precision>
+    <scale>2</scale>
+    <type>Currency</type>
+</CustomField>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VR_Return_Requires_Order</fullName>
+    <active>true</active>
+    <description>VR_Return_Requires_Order</description>
+    <errorConditionFormula>ISBLANK(Order__c)</errorConditionFormula>
+    <errorDisplayField>Order__c</errorDisplayField>
+    <errorMessage>A return cannot be requested without specifying an associated Order.</errorMessage>
+</ValidationRule>

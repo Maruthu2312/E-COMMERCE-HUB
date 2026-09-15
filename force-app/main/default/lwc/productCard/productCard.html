@@ -1,0 +1,71 @@
+<template>
+    <div class="product-card">
+        <!-- Wishlist Button -->
+        <button class={wishlistBtnClass} title="Add to Wishlist" onclick={handleToggleWishlist}>
+            <span class="heart-icon">{wishlistIcon}</span>
+        </button>
+
+        <!-- Stock Status Badge -->
+        <span class={stockBadgeClass}>{product.Stock_Status__c}</span>
+
+        <!-- Image or Fallback Area -->
+        <div class="image-wrapper" onclick={handleViewDetails}>
+            <template if:true={showImage}>
+                <img
+                    src={product.Product_Image_URL__c}
+                    alt={product.Name}
+                    class="product-img"
+                    onerror={handleImageError}
+                />
+            </template>
+            <template if:false={showImage}>
+                <div class={categoryFallbackClass}>
+                    <div class="fallback-icon-container">
+                        <span class="category-icon">{categoryEmoji}</span>
+                    </div>
+                    <span class="fallback-brand">{product.Brand__c}</span>
+                    <span class="fallback-category">{productCategoryName}</span>
+                </div>
+            </template>
+        </div>
+
+        <!-- Details Section -->
+        <div class="product-details">
+            <div class="brand-row">
+                <span class="brand-text">{product.Brand__c}</span>
+                <span class="category-pill">{productCategoryName}</span>
+            </div>
+
+            <h3 class="product-title" title={product.Name} onclick={handleViewDetails}>{product.Name}</h3>
+
+            <!-- Rating & Reviews -->
+            <div class="rating-row">
+                <div class="rating-pill">
+                    <span class="rating-star">★</span>
+                    <span class="rating-num">{formattedRating}</span>
+                </div>
+                <span class="stock-subtext">{stockSubtext}</span>
+            </div>
+
+            <!-- Price Tag -->
+            <div class="price-container">
+                <span class="final-price">₹{formattedFinalPrice}</span>
+                <template if:true={hasDiscount}>
+                    <span class="original-price">₹{formattedOriginalPrice}</span>
+                    <span class="discount-badge">-{product.Discount_Percentage__c}%</span>
+                </template>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="actions-row">
+                <button class="btn-quick-view" onclick={handleViewDetails} title="View full specifications">
+                    Details
+                </button>
+                <button class={addToCartBtnClass} onclick={handleAddToCart} disabled={isOutOfStock}>
+                    <span class="btn-cart-icon">🛒</span>
+                    <span>{addToCartLabel}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</template>

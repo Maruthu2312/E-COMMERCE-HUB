@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VR_Delivery_After_Shipment</fullName>
+    <active>true</active>
+    <description>VR_Delivery_After_Shipment</description>
+    <errorConditionFormula>NOT(ISBLANK(Actual_Delivery_Date__c)) &amp;&amp; NOT(ISBLANK(Shipment_Date__c)) &amp;&amp; Actual_Delivery_Date__c &lt; Shipment_Date__c</errorConditionFormula>
+    <errorDisplayField>Actual_Delivery_Date__c</errorDisplayField>
+    <errorMessage>Actual Delivery date cannot be earlier than Shipment date.</errorMessage>
+</ValidationRule>

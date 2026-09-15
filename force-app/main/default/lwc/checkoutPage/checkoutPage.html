@@ -1,0 +1,76 @@
+<template>
+    <div class="slds-box slds-theme_default slds-p-around_large checkout-container">
+        <h2 class="slds-text-heading_medium slds-m-bottom_medium">Multi-Step Checkout</h2>
+
+        <lightning-progress-indicator current-step={currentStep} type="path" variant="base">
+            <lightning-progress-step label="Customer" value="1"></lightning-progress-step>
+            <lightning-progress-step label="Shipping" value="2"></lightning-progress-step>
+            <lightning-progress-step label="Summary" value="3"></lightning-progress-step>
+            <lightning-progress-step label="Payment" value="4"></lightning-progress-step>
+            <lightning-progress-step label="Confirmation" value="5"></lightning-progress-step>
+        </lightning-progress-indicator>
+
+        <!-- Step 1: Customer Info -->
+        <template if:true={isStep1}>
+            <div class="step-content slds-m-top_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_small">Customer Information</h3>
+                <lightning-input label="Full Name" value={customerName} required onchange={handleNameChange}></lightning-input>
+                <lightning-input label="Email Address" type="email" value={email} required onchange={handleEmailChange}></lightning-input>
+                <lightning-input label="Phone Number" type="tel" value={phone} required onchange={handlePhoneChange}></lightning-input>
+                <lightning-button label="Next: Shipping Address" variant="brand" class="slds-m-top_medium" onclick={goStep2}></lightning-button>
+            </div>
+        </template>
+
+        <!-- Step 2: Shipping Info -->
+        <template if:true={isStep2}>
+            <div class="step-content slds-m-top_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_small">Shipping & Billing Address</h3>
+                <lightning-textarea label="Delivery Address" value={shippingAddress} required onchange={handleShippingChange}></lightning-textarea>
+                <lightning-textarea label="Billing Address" value={billingAddress} required onchange={handleBillingChange}></lightning-textarea>
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Back" variant="neutral" onclick={goStep1} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label="Next: Review Summary" variant="brand" onclick={goStep3}></lightning-button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Step 3: Order Review -->
+        <template if:true={isStep3}>
+            <div class="step-content slds-m-top_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_small">Order Review</h3>
+                <p><strong>Deliver To:</strong> {customerName}, {shippingAddress}</p>
+                <p class="slds-m-top_x-small"><strong>Items Total:</strong> ₹{checkoutData.subtotal}</p>
+                <p class="slds-m-top_x-small"><strong>Discount:</strong> - ₹{checkoutData.discount}</p>
+                <p class="slds-m-top_x-small"><strong>GST & Shipping:</strong> ₹{checkoutData.tax} + ₹50</p>
+                <p class="slds-m-top_small slds-text-heading_small"><strong>Amount Payable: ₹{checkoutData.grandTotal}</strong></p>
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Back" variant="neutral" onclick={goStep2} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label="Next: Payment Method" variant="brand" onclick={goStep4}></lightning-button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Step 4: Payment Selection -->
+        <template if:true={isStep4}>
+            <div class="step-content slds-m-top_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_small">Select Payment Method</h3>
+                <lightning-radio-group name="paymentMethod" label="Payment Options" options={paymentOptions} value={selectedPaymentMethod} onchange={handlePaymentSelect}></lightning-radio-group>
+                <div class="slds-m-top_large">
+                    <lightning-button label="Back" variant="neutral" onclick={goStep3} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label="Authorize & Place Order" variant="success" onclick={handlePlaceOrder} disabled={isPlacingOrder}></lightning-button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Step 5: Order Confirmation -->
+        <template if:true={isStep5}>
+            <div class="step-content slds-m-top_large slds-text-align_center">
+                <lightning-icon icon-name="action:approval" size="large" class="slds-m-bottom_medium"></lightning-icon>
+                <h3 class="slds-text-heading_large slds-text-color_success">Order Placed Successfully!</h3>
+                <p class="slds-m-top_small">Your Order ID is: <strong>{confirmedOrderId}</strong></p>
+                <p class="slds-text-color_weak slds-m-top_xx-small">A confirmation receipt has been dispatched to {email}.</p>
+                <lightning-button label="Return to Store" variant="brand" class="slds-m-top_large" onclick={handleFinish}></lightning-button>
+            </div>
+        </template>
+    </div>
+</template>

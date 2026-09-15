@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VR_Prevent_Draft_To_Completed</fullName>
+    <active>true</active>
+    <description>VR_Prevent_Draft_To_Completed</description>
+    <errorConditionFormula>ISCHANGED(Order_Status__c) &amp;&amp; ISPICKVAL(PRIORVALUE(Order_Status__c), "Draft") &amp;&amp; (ISPICKVAL(Order_Status__c, "Delivered") || ISPICKVAL(Order_Status__c, "Completed"))</errorConditionFormula>
+    
+    <errorMessage>An order in Draft status must first be Confirmed, Processed, and Shipped before completion.</errorMessage>
+</ValidationRule>
